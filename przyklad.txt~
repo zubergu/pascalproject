@@ -1,0 +1,41 @@
+program wypisz_enum;
+
+type
+    struktura = record
+        wartosc:integer;
+        end;
+
+var
+    tablica: array[1..3] of struktura;
+    ile_danych: integer;
+
+procedure uzupelnij(var tab: array of struktura; var zlicz:integer);
+    var i:integer;
+    begin
+    zlicz:=0;
+    i:=1;
+    for i:=1 to 3 do
+        begin
+        writeln('Iteration no. ',i);
+        tab[i].wartosc:=i;
+        writeln('zlicz przed ', zlicz);
+        zlicz:=(zlicz+1);
+        writeln('zlicz po ', zlicz);
+        end;
+    writeln(zlicz);
+    end;
+
+begin
+    ile_danych:=0;
+    uzupelnij(tablica,ile_danych);
+    writeln(ile_danych);
+
+    while ( ile_danych >= 1 ) do
+        begin
+        writeln('tablica[',ile_danych,']= ', tablica[ile_danych].wartosc);
+        ile_danych:=ile_danych-1;
+        end;
+end.
+
+
+
