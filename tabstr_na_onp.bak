@@ -1,6 +1,6 @@
 program odwr_not_pol;
 
-uses rownanie_na_struktury; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
+uses unit_rownanie_na_struktury, unit_kolejki_kopce; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
                                 napis na tablice struktur(rozbij_na_str(rownanie, wynik, licznik): Boolean *}
 
 
@@ -8,11 +8,18 @@ var
     rownanie:       string;
     tablica_str:    tablica;
     ile_str:        integer;
+    stan:           Boolean;
+
+    P_kolejki: ^element_kolejki;   { glowa kolejki }
+    P_kopca:   ^element_kopca;     { glowa kopca }
+
 
 begin
 rownanie:='-sin(a+b)';
 
-if (rozbij_na_str(rownanie, tablica_str, ile_str) = True ) then
+stan:=rozbij_na_str(rownanie, tablica_str, ile_str);
+
+if (stan ) then
     begin
     writeln('utworzono ',ile_str,' struktur');
     end
