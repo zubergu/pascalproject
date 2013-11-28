@@ -1,6 +1,6 @@
 program odwr_not_pol;
 
-uses unit_rownanie_na_struktury, unit_kolejki_kopce; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
+uses unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
                                 napis na tablice struktur(rozbij_na_str(rownanie, wynik, licznik): Boolean *}
 
 
@@ -11,20 +11,158 @@ var
     stan:           Boolean;
 
     P_kolejki: ^element_kolejki;   { glowa kolejki }
-    P_kopca:   ^element_kopca;     { glowa kopca }
+    P_stosu:   ^element_stosu;     { glowa kopca }
 
+    i:integer;
+    kolejki_temp: Struktura;
+
+function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
+        var
+                i:              integer;
+                poprawna:       Boolean;
+                nowe_ile_str:   integer; { za kazdym razem, kiedy dodaje do kolejki doliczam jedna strukture }
+
+        begin
+        poprawna:=True;
+        nowe_ile_str:=0;
+
+        for i:=1 to ile_str do { dla kazdej struktury w tablicy }
+                begin
+                if tablica_str[i].typ = Liczba then { jesli struktura jest liczba to wrzuc ja do kolejki }
+                        begin
+                        Do_kolejki(P_kolejki, tablica_str[i]);
+                        nowe_ile_str:=nowe_ile_str+1;
+                        end
+
+                else if tablica_str[i].typ = Zmienna then { jesli struktura jest zmienna to wrzuc ja do kolejki }
+                        begin
+                        Do_kolejki(P_kolejki, tablica_str[i]);
+                        nowe_ile_str:=nowe_ile_str+1;
+                        end
+
+                else if tablica_str[i].typ = Funkcja then { jesli struktura jest funkcja to wrzuc ja na stos }
+                        begin
+                        Na_stos(P_stosu, tablica_str[i]);
+                        end
+
+                else if tablica_str[i].typ = Nawias then { jesli struktura jest nawias to sprawdz czy lewy czy prawy }
+                        begin
+                        if tablica_str[i].nazwa = '(' then { lewy nawias wrzuc na stos }
+                                begin
+                                Na_stos(P_stosu, tablica_str[i]);
+                                end
+                        else   {* jesli nawias jest prawy to sciagaj ze stosu az do znalezienia lewego
+                                 i przenos elementy do kolejki wyjsciowej *}
+                                begin
+                                while (True) do
+                                        begin
+                                        kolejki_temp:=Ze_stosu(P_stosu);
+
+                                        if (kolejki_temp.typ = Pusty) then { jesli kolejka jest pusta to przerwij dzialanie}
+                                                begin                     { bo rownanie jest niepoprawne }
+                                                zamien_na_onp:=False;
+                                                poprawna:=False;
+                                                writeln('Blad. Prawdopodobnie jakis prawy nawias nie mial pary.');
+                                                nowe_ile_str:=0; { bedzie 0 nowych struktur }
+                                                i:=ile_str+1; { to powinno spowodowac przerwanie zewnetrznej petli for }
+                                                break;        { to powinno spowodowac przerwanie petli while }
+                                                end
+
+                                        else if (kolejki_temp.nazwa <> '(') then { jesli jest cos innego niz lewy nawias }
+                                                begin
+                                                Do_kolejki(P_kolejki, kolejki_temp);
+                                                nowe_ile_str:=nowe_ile_str+1;
+                                                end
+
+                                        else    { jesli wczytano '(' przerwij dzialanie petli }
+                                                break;
+
+                                        end;
+                                end;
+                        end
+
+                else if ( tablica_str[i].typ = Operacja ) then { jesli struktura to operator }
+                        {*
+                                TA CZESC JEST DO ZROBIENIA,
+                                CZESCIOWO BEDZIE DZIALAC, ALE KOLEJNOSC OPERATOROW NADAL NIE JEST
+                                DOBRZE ZAIMPLEMENTOWANA.
+                                BYC MOZE TRZEBA BEDZIE ZMIENIC SPOSOB PRZECHOWYWANIA INFORMACJI O OPERATORACH
+                                ORAZ ICH PRIORYTECIE WYKONYWANIA NA JAKAS TABLICE STRUKTUR?
+                                PODOBNIE JAK Z PRZECHOWYWANIEM INFORMACJI O FUNKCJACH.
+                        *}
+                        begin
+                        kolejki_temp:=Ze_stosu(P_stosu); { zdejmij element ze stosu, zeby porownac jego priorytet }
+                        if (kolejki_temp.typ <> Operacja) and (kolejki_temp.typ <> Pusty) then { jesli na na wierzchu stosu nie ma operatora }
+                                begin
+                                Na_stos(P_stosu, kolejki_temp);         { wrzuc to co zdjales wczesniej }
+                                Na_stos(P_stosu, tablica_str[i]);       { wrzuc operator ktory wziales z tablicy }
+                                end
+                        else    { jesli jednak na stosie byl operator, to trzeba sprawdzic jego priorytet itd. }
+                                begin
+                                Na_stos(P_stosu, tablica_str[i]);
+                                end;
+                        end;
+
+                end;
+        {*
+                KONIEC PETLI FOR, NIE MA WIECEJ ELEMENTOW
+
+                TU TRZEBA PRZERZUCIC POZOSTALE ELEMENTY ZE STOSU DO KOLEJKI A Z KOLEJKI DO TABLICY TABLICA_STR
+        *}
+        if (poprawna = True ) then { jesli wczesniej nie wystapil zaden blad }
+                begin
+                kolejki_temp:=Ze_stosu(P_stosu);
+
+                while(kolejki_temp.typ <> Pusty ) do { jest stos nie jest pusty to wrzucaj do kolejki wyjsciowej }
+                        begin
+                        Do_kolejki(P_kolejki, kolejki_temp);
+                        nowe_ile_str:=nowe_ile_str+1;
+                        kolejki_temp:=Ze_stosu(P_stosu);
+                        end;
+                {*
+                        TERAZ PRZERZUCAMY Z KOLEJKI DO TABLICY
+                *}
+
+                kolejki_temp:=Z_kolejki(P_kolejki);
+                i:=0;
+                while( kolejki_temp.typ <> Pusty ) do { jesli kolejka nie pusta to zapisz do kolejnego miejsca w tablicy }
+                        begin
+                        i:=i+1;
+                        if kolejki_temp.typ = Nawias then { jesli na koniec zostaly w kolejce jakies nawiasy, }
+                                begin                     { to oznacza, ze byly niesparowane, niepoprawne rownanie }
+                                writeln('Blad. Znaleziono nawias w kolejce. Prawdopodobnie jakis lewy nawias byl niesparowany.');
+                                poprawna:=False;
+                                zamien_na_onp:=False;
+                                nowe_ile_str:=0;
+                                break;
+                                end;
+
+                        tablica_str[i]:=kolejki_temp;
+                        kolejki_temp:=Z_kolejki(P_kolejki);
+                        end;
+                if (poprawna = True ) then { jesli nadal wszystko poszlo ok to }
+                        begin
+                        zamien_na_onp:=True;
+                        end;
+                end;
+        ile_str:=nowe_ile_str; { na koniec zawsze zaktualizuj liczbe struktur, 0 w przypadku bledu }
+        end; { koniec funkcji zamien_na_onp }
 
 begin
-rownanie:='-sin(a+b)';
+rownanie:='3*--2';
 
 stan:=rozbij_na_str(rownanie, tablica_str, ile_str);
+stan:=zamien_na_onp(tablica_str, ile_str);
 
-if (stan ) then
-    begin
-    writeln('utworzono ',ile_str,' struktur');
-    end
+if stan = True then
+        begin
+        for i:=1 to ile_str do
+                begin
+                writeln('El.',i);
+                writeln('Nazwa: ',tablica_str[i].nazwa);
+                writeln('Typ: ', tablica_str[i].typ,' unarny?: ', tablica_str[i].unarny);
+                end;
+        end
 else
-    begin
-    writeln('Nie udalo sie utworzyc struktur danych');
-    end;
+        writeln('cos poszlo nie tak jak powinno');
 end.

@@ -28,15 +28,15 @@ type
         element_kolejki = element_stosu;
 
 procedure Na_stos(var P_stosu:Twsk_elstosu; element: Struktura);
-function Ze_stosu(var P_stosu: ^element_stosu): Struktura;
-procedure Do_kolejki(var P_kolejki: ^element_kolejki; element: Struktura);
-function  Z_kolejki(var P_kolejki: ^element_kolejki): Struktura;
+function Ze_stosu(var P_stosu: Twsk_elstosu): Struktura;
+procedure Do_kolejki(var P_kolejki: Twsk_elkolejki; element: Struktura);
+function  Z_kolejki(var P_kolejki: Twsk_elkolejki): Struktura;
 
 implementation
 
-procedure Na_stos(var P_stosu: ^element_stosu; element: Struktura);
+procedure Na_stos(var P_stosu: Twsk_elstosu; element: Struktura);
         var
-                temp: ^element_stosu;
+                temp: Twsk_elstosu;
 
         begin
             New(temp);
@@ -46,16 +46,20 @@ procedure Na_stos(var P_stosu: ^element_stosu; element: Struktura);
             P_stosu:=temp;
         end;
 
-function Ze_stosu(var P_stosu: ^element_stosu): Struktura;
+function Ze_stosu(var P_stosu: Twsk_elstosu): Struktura;
         var
-                temp:^element_stosu;
+                temp:Twsk_elstosu;
                 el_temp: Struktura;
 
         begin
+                el_temp.nazwa:='';
+                el_temp.typ:=Pusty;
+                el_temp.unarny:=False;
 
                 if (P_stosu = nil) then
                         begin
-                        Ze_stosu:=nil;
+                        Ze_stosu:=el_temp; {* jesli stos jest pusty to zwroci strukture bez nazwy, nieunarna,
+                                                o typie Pusty! *}
                         end
 
                 else
@@ -69,10 +73,10 @@ function Ze_stosu(var P_stosu: ^element_stosu): Struktura;
                         end;
         end;
 
-procedure Do_kolejki(var P_kolejki: ^element_kolejki; element: Struktura);
+procedure Do_kolejki(var P_kolejki: Twsk_elkolejki; element: Struktura);
         var
-                temp: ^element_kolejki;
-                ostatni: ^element_kolejki;
+                temp: Twsk_elkolejki;
+                ostatni: Twsk_elkolejki;
 
         begin
 
@@ -98,25 +102,29 @@ procedure Do_kolejki(var P_kolejki: ^element_kolejki; element: Struktura);
         end;
 
 
-function Z_kolejki(var P_kolejki: ^element_kolejki): Struktura;
+function Z_kolejki(var P_kolejki: Twsk_elkolejki): Struktura;
         var
-                temp_el: Struktura;
-                temp:    ^element_kolejki;
+                el_temp: Struktura;
+                temp:    Twsk_elkolejki;
 
         begin
+                el_temp.nazwa:='';
+                el_temp.typ:=Pusty;
+                el_temp.unarny:=False;
+
                 if (P_kolejki = nil ) then { jesli kolejka jest pusta }
                         begin
-                        Z_kolejki:=nil;
+                        Z_kolejki:=el_temp;
                         end
 
                 else
                         begin
-                        temp_el:=P_kolejki^.informacje;
+                        el_temp:=P_kolejki^.informacje;
                         temp:=P_kolejki;
                         P_kolejki:=P_kolejki^.next;
                         Dispose(temp);
 
-                        Z_kolejki:=temp_el;
+                        Z_kolejki:=el_temp;
                         end;
         end;
 

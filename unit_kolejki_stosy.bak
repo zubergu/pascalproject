@@ -16,8 +16,8 @@ interface
 uses unit_rownanie_na_struktury;
 
 type
-        Twsk_elstosu: ^element_stosu;
-        Twsk_elkolejki: ^element_kolejki;
+        Twsk_elstosu =  ^element_stosu;
+        Twsk_elkolejki = ^element_kolejki;
 
         element_stosu = record              { typ elementow kolejki i kopca do przetwarzania na onp }
                 informacje:Struktura;

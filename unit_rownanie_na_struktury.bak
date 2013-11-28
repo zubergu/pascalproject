@@ -10,7 +10,7 @@
             - NAWIASOM.
 *}
 
-unit  rownanie_na_struktury;
+unit  unit_rownanie_na_struktury;
 
 
 
@@ -119,7 +119,6 @@ function typ_elementu(tymczasowy:string):Typy;
         czy_ustalony:=True;
         end;
 
-    WRITELN(' TYMCZASOWY: ',TYMCZASOWY,' ROZPOZNALEM JAKO TYP: ', TYP_ELEMENTU);
     end; { koniec funkcji typ_tymczasowego }
 
 
