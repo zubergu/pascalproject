@@ -1,4 +1,21 @@
-program rownanie_na_struktury;
+{*
+
+        CZESC PROGRAMU ROZWIAZUJACEGO ROWNANIA MATEMATYCZNE
+        ODPOWIEDZIALNA ZA ZAMIANE NAPISU(ROWNANIA) WPROWADZONEGO PRZEZ UZYTKOWNIKA
+        NA TABLICE STRUKTUR ODPOWIADAJACYCH:
+            - ZMIENNYM,
+            - FUNKCJOM,
+            - LICZBOM,
+            - OPERATOROM,
+            - NAWIASOM.
+*}
+
+unit  rownanie_na_struktury;
+
+
+
+
+interface
 
 
 const
@@ -17,21 +34,22 @@ type
 
 
     Struktura = record
-        nazwa:string;
-        typ: Typy;
+        nazwa:  string;
+        typ:    Typy;
         unarny: Boolean;
         end;
 
     tablica = array[1..255] of Struktura;         {* tablica maksymalnie 255 struktur odpowiadajacych elementow
                                                     rownania wejsciowego *}
 
-var
-    rownanie:string;
-    rozbite: tablica;
-    liczba_str: integer;
+function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer): Boolean;
 
 
 
+
+
+
+implementation
 
 
 function typ_elementu(tymczasowy:string):Typy;
@@ -203,30 +221,4 @@ function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer
 
     end;    { koniec funkcji rozbij_na_str }
 
-
-
-
-
-
-
-
-
-{* tu zaczyna sie wlasciwa czesc programu, ktory bedzie potem wykorzystany jako procedura w main.pas *}
-begin
-rownanie:='-sin(-abc-arg)-cos(abc)';
-liczba_str:=0;
-
-IF (rozbij_na_str(rownanie, rozbite, liczba_str)) THEN
-    BEGIN
-    writeln(liczba_str);
-
-    while( liczba_str>0 ) do
-        begin
-        writeln('nazwa elementu ',liczba_str,': ', rozbite[liczba_str].nazwa,' typ: ', rozbite[liczba_str].typ,' unarny: ',rozbite[liczba_str].unarny);
-        liczba_str:=liczba_str-1;
-        end;
-
-    end
-ELSE
-    WRITELN(' PROGRAM NIE ROZPOZNAL CZESCI ZNAKOW W ROWNANIU. KONIEC DZIALANIA. ');
-END.
+end.
