@@ -1,0 +1,19 @@
+program klasy_i_drzewo;
+
+uses heaptrc, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
+
+
+type
+    obiekt = object
+        nazwa:          string;
+        typ:            Typy;
+        unarny:         Boolean;
+        wartosc:        real;
+        lewy_operand:   ^obiekt;
+        prawy_operand:  ^obiekt;
+    end;
+
+begin
+writeln('czy dziala');
+
+end.

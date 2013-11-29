@@ -1,6 +1,6 @@
 program odwr_not_pol;
 
-uses unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
+uses heaptrc,unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
                                 napis na tablice struktur(rozbij_na_str(rownanie, wynik, licznik): Boolean *}
 
 
@@ -225,7 +225,7 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
         end; { koniec funkcji zamien_na_onp }
 
 begin
-rownanie:='s';
+rownanie:='sin(a+b)-c';
 
 stan:=rozbij_na_str(rownanie, tablica_str, ile_str);
 stan:=zamien_na_onp(tablica_str, ile_str);
