@@ -1,20 +1,17 @@
-program odwr_not_pol;
+unit unit_tabstr_na_onp;
 
-uses unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
+
+interface
+
+uses heaptrc,unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
                                 napis na tablice struktur(rozbij_na_str(rownanie, wynik, licznik): Boolean *}
 
 
-var
-    rownanie:       string;
-    tablica_str:    tablica;
-    ile_str:        integer;
-    stan:           Boolean;
+function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
 
-    P_kolejki: ^element_kolejki;   { glowa kolejki }
-    P_stosu:   ^element_stosu;     { glowa kopca }
 
-    i:integer;
-    kolejki_temp: Struktura;
+
+implementation
 
 function porownaj_operatory(op_stos: Struktura; op_tablica: Struktura): integer;
 { funkcja bedzie zwracala roznice w wysokosci proriorytetu operatora na stosie i operatora z tablicy }
@@ -81,13 +78,18 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
                 i:              integer;
                 poprawna:       Boolean;
                 nowe_ile_str:   integer; { za kazdym razem, kiedy dodaje do kolejki doliczam jedna strukture }
-
+                P_kolejki:      ^element_kolejki;
+                P_stosu:        ^element_stosu;
+                kolejki_temp:   Struktura;
         begin
         poprawna:=True;
         nowe_ile_str:=0;
+        P_kolejki:=nil;
+        P_stosu:=nil;
 
         for i:=1 to ile_str do { dla kazdej struktury w tablicy }
                 begin
+                WRITELN('TYP SPRAWDZANEGO ELEMENTU TABLICY:', I, TABLICA_STR[I].TYP, TABLICA_STR[I].NAZWA);
                 if tablica_str[i].typ = Liczba then { jesli struktura jest liczba to wrzuc ja do kolejki }
                         begin
                         Do_kolejki(P_kolejki, tablica_str[i]);
@@ -134,8 +136,26 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
                                                 nowe_ile_str:=nowe_ile_str+1;
                                                 end
 
-                                        else    { jesli wczytano '(' przerwij dzialanie petli }
-                                                break;
+                                        else    {* jesli wczytano '(' to zdejmij nastepny element
+                                                    i jesli jest to funkcja to wrzuc go do kolejki wyjsciowej,
+                                                    jestli to nie jest funkcja zwroc na stos *}
+                                                begin
+                                                kolejki_temp:=Ze_stosu(P_stosu);
+                                                WRITELN(' WCZYTALEM LEWY NAWIAS I POBIERAM ELEMENT ZE STOSU ');
+                                                if (kolejki_temp.typ = Funkcja) then
+                                                    begin
+                                                    Do_kolejki(P_kolejki, kolejki_temp);
+                                                    nowe_ile_str:=nowe_ile_str+1;
+                                                    break;
+                                                    end
+                                                else if (kolejki_temp.typ <> Pusty ) then
+                                                    begin
+                                                    Na_stos(P_stosu, kolejki_temp);
+                                                    break;
+                                                    end;
+                                                end;
+
+
 
                                         end;
                                 end;
@@ -154,6 +174,7 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
                                         Na_stos(P_stosu, kolejki_temp);         { wrzuc to co zdjales wczesniej }
                                         end;
                                 Na_stos(P_stosu, tablica_str[i]);       { wrzuc operator ktory wziales z tablicy }
+
                                 end
 
                         else    { jesli jednak na stosie byl operator, to trzeba sprawdzic jego priorytet itd. }
@@ -224,21 +245,4 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
         ile_str:=nowe_ile_str; { na koniec zawsze zaktualizuj liczbe struktur, 0 w przypadku bledu }
         end; { koniec funkcji zamien_na_onp }
 
-begin
-rownanie:='s';
-
-stan:=rozbij_na_str(rownanie, tablica_str, ile_str);
-stan:=zamien_na_onp(tablica_str, ile_str);
-
-if stan = True then
-        begin
-        for i:=1 to ile_str do
-                begin
-                writeln('El.',i);
-                writeln('Nazwa: ',tablica_str[i].nazwa);
-                writeln('Typ: ', tablica_str[i].typ,' unarny?: ', tablica_str[i].unarny);
-                end;
-        end
-else
-        writeln('cos poszlo nie tak jak powinno. Linijke wyzej powinno byc napisane co. ^^^');
 end.

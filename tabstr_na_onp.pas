@@ -1,6 +1,6 @@
 program odwr_not_pol;
 
-uses unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
+uses heaptrc,unit_rownanie_na_struktury, unit_kolejki_stosy; {* dolacza jednostke z deklaracja typow danych, struktur oraz funkcja zamieniajaca
                                 napis na tablice struktur(rozbij_na_str(rownanie, wynik, licznik): Boolean *}
 
 
@@ -21,15 +21,21 @@ function porownaj_operatory(op_stos: Struktura; op_tablica: Struktura): integer;
         const
                 PR_UNARNEGO = 3; { operator unarny ma najwyzszy prorytet i wyznacza rozmiar tablicy }
         var
-                priorytety: array[1..3] of string = ( ('a+-a') , ('a*/a') , ('unarny') ); {* unarny jest sprawdzany poprzez
-                                                                                        strukture, tutaj jest tylko
-                                                                                        dla kompletnosci zapisu,
-                                                                                        wartosc nieuzywana w praktyce *}
+                priorytety: array[1..PR_UNARNEGO] of string;
+
                 priorytet_stos: integer;
                 priorytet_tab:  integer;
                 i:              integer; { indeks w tablicy priorytetow, czyli wlasnie priorytet operatora }
 
         begin
+        {* NIESTETY NIE UDALO MI SIE ZAINICJALIZOWAC TABLICY PRIORYTETOW W ZADEN SENSOWNY SPOSOB WIEC
+                ROBIE TO RECZNIE *}
+        priorytety[1]:='+-';
+        priorytety[2]:='*/';
+        priorytety[3]:='unarny'; { w sumie tylko dla zasady, bo unarnosc sprawdza sie poprzez odwolanie
+                                   do wlasciwego pola w strukturze }
+
+
         priorytet_stos:=0;
         priorytet_tab:=0;
 
@@ -137,12 +143,7 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
 
                 else if ( tablica_str[i].typ = Operacja ) then { jesli struktura to operator }
                         {*
-                                TA CZESC JEST DO ZROBIENIA,
-                                CZESCIOWO BEDZIE DZIALAC, ALE KOLEJNOSC OPERATOROW NADAL NIE JEST
-                                DOBRZE ZAIMPLEMENTOWANA.
-                                BYC MOZE TRZEBA BEDZIE ZMIENIC SPOSOB PRZECHOWYWANIA INFORMACJI O OPERATORACH
-                                ORAZ ICH PRIORYTECIE WYKONYWANIA NA JAKAS TABLICE STRUKTUR?
-                                PODOBNIE JAK Z PRZECHOWYWANIEM INFORMACJI O FUNKCJACH.
+                                TA CZESC JEST DO SPRAWDZENIA, CZESCIOWO PRZETESTOWANA, ALE NIE DO KONCA
                         *}
                         begin
                         kolejki_temp:=Ze_stosu(P_stosu); { zdejmij element ze stosu, zeby porownac jego priorytet }
@@ -224,7 +225,7 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
         end; { koniec funkcji zamien_na_onp }
 
 begin
-rownanie:='-2+3';
+rownanie:='sin(a+b)-c';
 
 stan:=rozbij_na_str(rownanie, tablica_str, ile_str);
 stan:=zamien_na_onp(tablica_str, ile_str);
