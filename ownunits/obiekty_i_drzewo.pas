@@ -24,30 +24,30 @@ type
         lewy_operand:   TWsk_na_wezel;
         prawy_operand:  Twsk_na_wezel;
 
-        constructor init(nazwa1:string; typ1:Typy; unarny1: Boolean; lewy_operand1: TWsk_na_wezel; prawy_operand1: TWsk_na_wezel);
+        constructor init(nazwa:string; typ:Typy; unarny: Boolean; lewy_operand: TWsk_na_wezel; prawy_operand: TWsk_na_wezel);
         function    wartosc : real;
 
 
         end;
 
-        constructor wezel_drzewa.init(nazwa1: string; typ1: Typy; unarny1: Boolean; lewy_operand1: TWsk_na_wezel; prawy_operand1: Twsk_na_wezel);
+        constructor wezel_drzewa.init(nazwa: string; typ: Typy; unarny: Boolean; lewy_operand: TWsk_na_wezel; prawy_operand: Twsk_na_wezel);
             {* konstruktor dla obiektu przechowujacego informacje ze struktury
                 oraz zaleznosc pomiedzy tworzonym obiektem oraz pozostalymi obiektami *}
             begin
 
-            self.nazwa:=nazwa1;
-            self.typ:= typ1;
-            self.unarny:= unarny1;
-            self.lewy_operand:=lewy_operand1;
-            self.prawy_operand:=prawy_operand1;
+            self.nazwa:=nazwa;
+            self.typ:= typ;
+            self.unarny:= unarny;
+            self.lewy_operand:=lewy_operand;
+            self.prawy_operand:=prawy_operand;
             end;
 
-        function wezel_drzewa.wartosc:real;
+        function wezel_drzewa.wartosc;
             var
                 wartosc_zmiennej: integer;
 
             begin
-            WRITELN('LICZE ', SELF.NAZWA);
+
             if (self.typ = Liczba) then { jesli obiekt jest liczba }
                 begin
                 wartosc := StrToInt(self.nazwa);
@@ -276,7 +276,7 @@ begin
 stan_programu:= True;
 liczba_struktur:=0;
 root:=nil;
-rownanie:='(2*2-2-2)';
+rownanie:='-(sin(0)+2*2)';
 
 stan_programu:= rozbij_na_str(rownanie, tablica_struktur, liczba_struktur);
 if(stan_programu = False) then
@@ -302,7 +302,6 @@ if(stan_programu = False) then
 wynik:= root^.wartosc;
 writeln('WARTOSC ROWNANIA = ', wynik:4:4 );
 
-readln();
 end.
 
 

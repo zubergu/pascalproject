@@ -89,7 +89,7 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
 
         for i:=1 to ile_str do { dla kazdej struktury w tablicy }
                 begin
-                //WRITELN('TYP SPRAWDZANEGO ELEMENTU TABLICY:', i, TABLICA_STR[I].TYP, TABLICA_STR[I].NAZWA);
+                WRITELN('TYP SPRAWDZANEGO ELEMENTU TABLICY:', I, TABLICA_STR[I].TYP, TABLICA_STR[I].NAZWA);
                 if tablica_str[i].typ = Liczba then { jesli struktura jest liczba to wrzuc ja do kolejki }
                         begin
                         Do_kolejki(P_kolejki, tablica_str[i]);
@@ -126,9 +126,7 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
                                                 poprawna:=False;
                                                 writeln('Blad. Prawdopodobnie jakis prawy nawias nie mial pary.');
                                                 nowe_ile_str:=0; { bedzie 0 nowych struktur }
-                                                //i:=ile_str+1; { to powinno spowodowac przerwanie zewnetrznej petli for }
-                                                READLN(); { TO USUNAC PO DEBUGOWANIU KODU }
-                                                exit;
+                                                i:=ile_str+1; { to powinno spowodowac przerwanie zewnetrznej petli for }
                                                 break;        { to powinno spowodowac przerwanie petli while }
                                                 end
 
@@ -153,10 +151,6 @@ function zamien_na_onp(var tablica_str: tablica; var ile_str: integer):Boolean;
                                                 else if (kolejki_temp.typ <> Pusty ) then
                                                     begin
                                                     Na_stos(P_stosu, kolejki_temp);
-                                                    break;
-                                                    end
-                                                else
-                                                    begin
                                                     break;
                                                     end;
                                                 end;
