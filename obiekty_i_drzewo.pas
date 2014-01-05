@@ -276,7 +276,7 @@ begin
 stan_programu:= True;
 liczba_struktur:=0;
 root:=nil;
-rownanie:='(2*2-2-2)';
+rownanie:='(cos(2*(2-2)))';
 
 stan_programu:= rozbij_na_str(rownanie, tablica_struktur, liczba_struktur);
 if(stan_programu = False) then

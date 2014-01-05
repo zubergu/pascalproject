@@ -1,10 +1,13 @@
-program klasy_i_drzewo;
+unit unit_obiekty_i_drzewo;
+
+interface
 
 uses heaptrc,sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
 
 
-type
 
+
+type
 
 
     TWsk_na_wezel = ^wezel_drzewa;
@@ -14,6 +17,11 @@ type
         adres_wezla: TWsk_na_wezel;
         next: TWsk_na_elstosu;
         end;
+
+
+
+
+
 
 
     { POCZATEK definicji obiektu wezel_drzewa }
@@ -29,6 +37,10 @@ type
 
 
         end;
+
+function oblicz_rownanie(var root:TWsk_na_wezel; var rownanie:string; var tablica_struktur:tablica; var liczba_struktur:integer):real;
+
+implementation
 
         constructor wezel_drzewa.init(nazwa1: string; typ1: Typy; unarny1: Boolean; lewy_operand1: TWsk_na_wezel; prawy_operand1: Twsk_na_wezel);
             {* konstruktor dla obiektu przechowujacego informacje ze struktury
@@ -103,7 +115,6 @@ type
                     end;
                 end;
             end; { koniec funkcji self.wartosc dla wezla drzewa }
-
 
 
 
@@ -264,19 +275,15 @@ function stworz_drzewo(var root: TWsk_na_wezel; tablica_onp: tablica; liczba_str
 
      end;
 
+
+
+function oblicz_rownanie(var root:TWsk_na_wezel; var rownanie:string; var tablica_struktur:tablica; var liczba_struktur:integer):real;
 var
-    root:                   TWsk_na_wezel; { root drzewa dzialan }
-    rownanie:               string;     { rownanie wejsciowe }
-    tablica_struktur:       tablica;    { tablica struktur }
-    wynik:                  real;
-    liczba_struktur:        integer;
     stan_programu:          Boolean;
 
 begin
 stan_programu:= True;
 liczba_struktur:=0;
-root:=nil;
-rownanie:='(2*2-2-2)';
 
 stan_programu:= rozbij_na_str(rownanie, tablica_struktur, liczba_struktur);
 if(stan_programu = False) then
@@ -299,11 +306,8 @@ if(stan_programu = False) then
     exit;
     end;
 
-wynik:= root^.wartosc;
-writeln('WARTOSC ROWNANIA = ', wynik:4:4 );
-
-readln();
-end.
+oblicz_rownanie:= root^.wartosc;
+end;
 
 
 

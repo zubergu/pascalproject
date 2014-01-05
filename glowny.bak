@@ -1,0 +1,28 @@
+program glowny;
+
+
+uses heaptrc, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy, unit_obiekty_i_drzewo;
+
+var
+    root:                   TWsk_na_wezel; { root drzewa dzialan }
+    rownanie:               string;     { rownanie wejsciowe }
+    tablica_struktur:       tablica;    { tablica struktur }
+    wynik:                  real;
+    liczba_struktur:        integer;
+
+
+
+begin
+
+liczba_struktur:=0;
+root:=nil;
+writeln('Podaj rownanie do rozwiazania: ');
+readln(rownanie);
+
+wynik:=oblicz_rownanie(root, rownanie, tablica_struktur, liczba_struktur);
+
+writeln('WARTOSC ROWNANIA = ', wynik:4:4 );
+
+
+readln();
+end.
