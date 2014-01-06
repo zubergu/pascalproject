@@ -1,28 +1,38 @@
 program glowny;
 
-
+{ uzyj wszystkich poprzednio stworzonych unitow }
 uses heaptrc, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy, unit_obiekty_i_drzewo;
 
+
+
+{ stworz wszystkie podstawowe zmienne potrzebe do obliczenia wartosci rownania }
 var
     root:                   TWsk_na_wezel; { root drzewa dzialan }
     rownanie:               string;     { rownanie wejsciowe }
     tablica_struktur:       tablica;    { tablica struktur }
     wynik:                  real;
     liczba_struktur:        integer;
-
+    stan_programu:          Boolean;     { False jesli wystapil jakis blad }
 
 
 begin
+{ nadaj wartosci poczatkowe,
+  uzyj jedynej funkcji z unit_obiekty_i_drzewo ::: oblicz_rownanie,
+  ktora wyciaga potrzebne funkcje w odpowiedniej kolejnosci
+  i sprawdza stan obliczen
+}
 
 liczba_struktur:=0;
 root:=nil;
 writeln('Podaj rownanie do rozwiazania: ');
 readln(rownanie);
 
-wynik:=oblicz_rownanie(root, rownanie, tablica_struktur, liczba_struktur);
+wynik:=oblicz_rownanie(root, rownanie, tablica_struktur, liczba_struktur,stan_programu);
 
-writeln('WARTOSC ROWNANIA = ', wynik:4:4 );
-
+if (stan_programu = True ) then
+    writeln('WARTOSC ROWNANIA = ', wynik:4:4 )
+else
+    writeln('Wartosc rownania nie zostala obliczona, gdyz wystapily powyzsze problemy.');
 
 readln();
 end.

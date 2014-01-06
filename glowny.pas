@@ -1,7 +1,7 @@
 program glowny;
 
 { uzyj wszystkich poprzednio stworzonych unitow }
-uses heaptrc, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy, unit_obiekty_i_drzewo;
+uses  unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy, unit_obiekty_i_drzewo;
 
 
 
@@ -12,7 +12,7 @@ var
     tablica_struktur:       tablica;    { tablica struktur }
     wynik:                  real;
     liczba_struktur:        integer;
-
+    stan_programu:          Boolean;     { False jesli wystapil jakis blad }
 
 
 begin
@@ -27,10 +27,12 @@ root:=nil;
 writeln('Podaj rownanie do rozwiazania: ');
 readln(rownanie);
 
-wynik:=oblicz_rownanie(root, rownanie, tablica_struktur, liczba_struktur);
+wynik:=oblicz_rownanie(root, rownanie, tablica_struktur, liczba_struktur,stan_programu);
 
-writeln('WARTOSC ROWNANIA = ', wynik:4:4 );
-
+if (stan_programu = True ) then
+    writeln('WARTOSC ROWNANIA = ', wynik:4:4 )
+else
+    writeln('Wartosc rownania nie zostala obliczona, gdyz wystapily powyzsze problemy.');
 
 readln();
 end.

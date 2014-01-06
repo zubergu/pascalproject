@@ -38,7 +38,7 @@ type
 
         end;
 
-function oblicz_rownanie(var root:TWsk_na_wezel; var rownanie:string; var tablica_struktur:tablica; var liczba_struktur:integer):real;
+function oblicz_rownanie(var root:TWsk_na_wezel; var rownanie:string; var tablica_struktur:tablica; var liczba_struktur:integer; var stan_programu:Boolean):real;
 
 implementation
 
@@ -210,6 +210,12 @@ function stworz_obiekt(var P_stosu_obiektow: TWsk_na_elstosu; element_tablicy:St
         end
     else if ( element_tablicy.typ = Zmienna ) then {jesli tworzymy obiekt zmienna }
         begin
+
+        if (pos(element_tablicy.nazwa[1], litery) = 0 ) then { jesli pierwszy znak nazwy nie jest litera }
+            begin
+            writeln('Nazwa zmiennej MUSI zaczynac sie od litery.');
+            exit();
+            end;
         Prawy:=nil;
         Lewy:=nil;
         end;
@@ -249,6 +255,11 @@ function stworz_drzewo(var root: TWsk_na_wezel; tablica_onp: tablica; liczba_str
             end;
         end;
 
+    if (stan = False ) then
+        begin
+        stan:=False;
+        end;
+
     if ( stan = True ) then {*   jesli stworzono poprawnie wszystkie struktury to zmien roota drzewa poprzez zdjecie
                                 ostatniego elementu stosu,
                                 jesli po zmianie roota stos nie jest pusty, to mamy blad *}
@@ -277,9 +288,7 @@ function stworz_drzewo(var root: TWsk_na_wezel; tablica_onp: tablica; liczba_str
 
 
 
-function oblicz_rownanie(var root:TWsk_na_wezel; var rownanie:string; var tablica_struktur:tablica; var liczba_struktur:integer):real;
-var
-    stan_programu:          Boolean;
+function oblicz_rownanie(var root:TWsk_na_wezel; var rownanie:string; var tablica_struktur:tablica; var liczba_struktur:integer;var stan_programu:Boolean):real;
 
 begin
 stan_programu:= True;
