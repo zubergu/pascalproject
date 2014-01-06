@@ -2,7 +2,7 @@ unit unit_obiekty_i_drzewo;
 
 interface
 
-uses heaptrc,sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
+uses sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
 
 
 
@@ -257,8 +257,7 @@ function stworz_drzewo(var root: TWsk_na_wezel; tablica_onp: tablica; liczba_str
 
     if (stan = False ) then
         begin
-        stworz_drzewo:=False;
-        exit;
+        stan:=False;
         end;
 
     if ( stan = True ) then {*   jesli stworzono poprawnie wszystkie struktury to zmien roota drzewa poprzez zdjecie

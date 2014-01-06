@@ -2,7 +2,7 @@ unit unit_obiekty_i_drzewo;
 
 interface
 
-uses heaptrc,sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
+uses math,sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
 
 
 
@@ -112,6 +112,14 @@ implementation
                 else if (self.nazwa = 'cos' ) then
                     begin
                     wartosc := cos(lewy_operand^.wartosc);
+                    end
+                else if (self.nazwa = 'tg' ) then
+                    begin
+                    wartosc := tan(lewy_operand^.wartosc);
+                    end
+                else if ( self.nazwa = 'ctg' ) then
+                    begin
+                    wartosc := cotan(lewy_operand^.wartosc);
                     end;
                 end;
             end; { koniec funkcji self.wartosc dla wezla drzewa }

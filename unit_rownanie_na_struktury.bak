@@ -17,6 +17,7 @@ unit  unit_rownanie_na_struktury;
 
 interface
 
+uses sysutils;
 
 const
 
@@ -24,8 +25,9 @@ const
     litery = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; { zestaw wszystkich liter }
     operatory = '+-/*';             { zestaw wszystkich operatorow }
     nawiasy = '()';                 { zestaw wszystkich rozpoznawanych nawiasow }
-    funkcje = 'sin,cos,tg,ctg';                   { zestaw wszystkich rozpoznawanych funkcji,
-                                                    TU POWINNA BYC RACZEJ TABLICA NAPISOW }
+
+    liczba_funkcji = 5;             { liczba funkcji rozpoznawanych przez program }
+
 
 type
     Typy = (Zmienna, Liczba, Funkcja, Operacja, Nawias, Pusty);       {* Definicja typu  wyliczeniowego
@@ -51,7 +53,6 @@ function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer
 
 implementation
 
-
 function typ_elementu(tymczasowy:string):Typy;
     var
         czy_ustalony: Boolean;
@@ -59,11 +60,25 @@ function typ_elementu(tymczasowy:string):Typy;
         czy_funkcja:  Boolean;
         dlugosc:      integer;
         i:            integer;
+        licz_funk:    integer;      { licznik w petli sprawdzajacej czy element jest funkcja }
+        funkcje:      array[1..liczba_funkcji] of string;
     begin
 
     czy_ustalony:=False;
     czy_liczba:= True;
 
+    {
+      znowu nie ma sposobu na ladna inicjalizacje tablicy funkcji wiec, trzeba inicjalizowac tablice z palca
+      jak tu nie kochac pascala...
+    }
+    funkcje[1] := 'sin';
+    funkcje[2] := 'cos';
+    funkcje[3] := 'tg';
+    funkcje[4] := 'ctg';
+    funkcje[5] := '^';
+    {
+      co za kawal brzydkiego kodu...
+    }
 
     i:=1;
     dlugosc:=length(tymczasowy);
@@ -106,11 +121,17 @@ function typ_elementu(tymczasowy:string):Typy;
                                         nazwa funkcji moglaby byc odebrana jako funkcja np "si" przy przeszukiwaniu
                                         zostalaby potraktowana jako "sin" *}
         begin
-        if (pos(tymczasowy, funkcje) <> 0) then
+        for licz_funk:=1 to liczba_funkcji do
             begin
-            typ_elementu:=Funkcja;
-            czy_ustalony:=True;
+            if (AnsiCompareText(tymczasowy,funkcje[licz_funk]) = 0 ) then
+                begin
+                typ_elementu:=Funkcja;
+                czy_ustalony:=True;
+                break;
+                end;
             end;
+
+
         end;
 
     if (czy_ustalony = False ) then { jesli nie jest Pusty,Liczba, Operator, Nawias, Funkcja, to jest ZMIENNA }
@@ -152,6 +173,7 @@ function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer
         i:           integer;
         nowy_el:     Boolean;
         unarny:      Boolean;
+        stan:        Boolean;
     begin
 
     dlugosc:=length(r_wej);
@@ -207,6 +229,7 @@ function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer
             begin
             writeln('Nierozpoznawalne znaki w rownaniu!');
             rozbij_na_str:=False;
+            stan:=False;
             break;
             end;
 
@@ -217,7 +240,7 @@ function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer
         begin
         stworz_strukture(tymczasowy, unarny, wynik, licznik_str);
         end;
-
+    rozbij_na_str:=True;
     end;    { koniec funkcji rozbij_na_str }
 
 end.
