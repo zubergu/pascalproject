@@ -23,10 +23,10 @@ const
 
     cyfry = '0123456789';         { zestaw wszystkich cyfr }
     litery = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; { zestaw wszystkich liter }
-    operatory = '+-/*';             { zestaw wszystkich operatorow }
+    operatory = '+-/*^';             { zestaw wszystkich operatorow }
     nawiasy = '()';                 { zestaw wszystkich rozpoznawanych nawiasow }
 
-    liczba_funkcji = 5;             { liczba funkcji rozpoznawanych przez program }
+    liczba_funkcji = 6;             { liczba funkcji rozpoznawanych przez program }
 
 
 type
@@ -75,7 +75,8 @@ function typ_elementu(tymczasowy:string):Typy;
     funkcje[2] := 'cos';
     funkcje[3] := 'tg';
     funkcje[4] := 'ctg';
-    funkcje[5] := '^';
+    funkcje[5] := 'log2';
+    funkcje[6] := 'log10';
     {
       co za kawal brzydkiego kodu...
     }

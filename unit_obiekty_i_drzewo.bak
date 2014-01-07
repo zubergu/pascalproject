@@ -2,7 +2,7 @@ unit unit_obiekty_i_drzewo;
 
 interface
 
-uses sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
+uses math,sysutils, unit_rownanie_na_struktury, unit_tabstr_na_onp, unit_kolejki_stosy;
 
 
 
@@ -82,6 +82,10 @@ implementation
                     begin
                     wartosc := lewy_operand^.wartosc * prawy_operand^.wartosc;
                     end
+                else if (self.nazwa = '^') then
+                    begin
+                    wartosc := power(lewy_operand^.wartosc, prawy_operand^.wartosc);
+                    end
 
                 else if (self.nazwa = '/' ) then
                     begin
@@ -105,14 +109,31 @@ implementation
 
             else if (self.typ = Funkcja) then { jesli obiekt jest funkcja }
                 begin
-                if (self.nazwa = 'sin' ) then
+                if (AnsiLowerCase(self.nazwa) = 'sin' ) then
                     begin
                     wartosc := sin(lewy_operand^.wartosc);
                     end
-                else if (self.nazwa = 'cos' ) then
+                else if (AnsiLowerCase(self.nazwa) = 'cos' ) then
                     begin
                     wartosc := cos(lewy_operand^.wartosc);
+                    end
+                else if (AnsiLowerCase(self.nazwa) = 'tg' ) then
+                    begin
+                    wartosc := tan(lewy_operand^.wartosc);
+                    end
+                else if ( AnsiLowerCase(self.nazwa) = 'ctg' ) then
+                    begin
+                    wartosc := cotan(lewy_operand^.wartosc);
                     end;
+                else if (AnsiLowerCase(self.nazwa) = 'log2') then
+		    begin
+		    wartosc := log2(lewy_operand^.wartosc);
+		    end;
+		else if (AnsiLowerCase(self.nazwa) = 'log10') then
+		    begin
+		    wartosc := log10(lewy_operand^.wartosc);
+		    end;
+		    
                 end;
             end; { koniec funkcji self.wartosc dla wezla drzewa }
 
@@ -200,6 +221,7 @@ function stworz_obiekt(var P_stosu_obiektow: TWsk_na_elstosu; element_tablicy:St
             begin
             WRITELN(' NIE UDALO SIE POBRAC ADRESU OBIEKTU ZE STOSU ');
             stworz_obiekt:=False;
+            poprawne:=False;
             end;
 
         end

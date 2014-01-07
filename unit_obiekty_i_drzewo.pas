@@ -82,6 +82,10 @@ implementation
                     begin
                     wartosc := lewy_operand^.wartosc * prawy_operand^.wartosc;
                     end
+                else if (self.nazwa = '^') then
+                    begin
+                    wartosc := power(lewy_operand^.wartosc, prawy_operand^.wartosc);
+                    end
 
                 else if (self.nazwa = '/' ) then
                     begin
@@ -105,22 +109,74 @@ implementation
 
             else if (self.typ = Funkcja) then { jesli obiekt jest funkcja }
                 begin
-                if (self.nazwa = 'sin' ) then
+                if (AnsiLowerCase(self.nazwa) = 'sin' ) then
                     begin
                     wartosc := sin(lewy_operand^.wartosc);
                     end
-                else if (self.nazwa = 'cos' ) then
+                else if (AnsiLowerCase(self.nazwa) = 'cos' ) then
                     begin
                     wartosc := cos(lewy_operand^.wartosc);
                     end
-                else if (self.nazwa = 'tg' ) then
+                else if (AnsiLowerCase(self.nazwa) = 'tg' ) then
                     begin
                     wartosc := tan(lewy_operand^.wartosc);
                     end
-                else if ( self.nazwa = 'ctg' ) then
+                else if ( AnsiLowerCase(self.nazwa) = 'ctg' ) then
                     begin
                     wartosc := cotan(lewy_operand^.wartosc);
-                    end;
+                    end
+                else if (AnsiLowerCase(self.nazwa) = 'log2') then
+		    begin
+		    wartosc := log2(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'log10') then
+		    begin
+		    wartosc := log10(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arccos') then
+		    begin
+		    wartosc := arccos(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arccosh') then
+		    begin
+		    wartosc := arccosh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arcosh') then
+		    begin
+		    wartosc := arcosh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arcsin') then
+		    begin
+		    wartosc := arcsin(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arcsinh') then
+		    begin
+		    wartosc := arcsinh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arctanh') then
+		    begin
+		    wartosc := arctanh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'arsinh') then
+		    begin
+		    wartosc := arsinh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'artanh') then
+		    begin
+		    wartosc := artanh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'cosh') then
+		    begin
+		    wartosc := cosh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'sinh') then
+		    begin
+		    wartosc := sinh(lewy_operand^.wartosc);
+		    end
+		else if (AnsiLowerCase(self.nazwa) = 'tanh') then
+		    begin
+		    wartosc := tanh(lewy_operand^.wartosc);
+		    end
                 end;
             end; { koniec funkcji self.wartosc dla wezla drzewa }
 
@@ -208,6 +264,7 @@ function stworz_obiekt(var P_stosu_obiektow: TWsk_na_elstosu; element_tablicy:St
             begin
             WRITELN(' NIE UDALO SIE POBRAC ADRESU OBIEKTU ZE STOSU ');
             stworz_obiekt:=False;
+            poprawne:=False;
             end;
 
         end

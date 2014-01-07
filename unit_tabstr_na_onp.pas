@@ -16,7 +16,7 @@ implementation
 function porownaj_operatory(op_stos: Struktura; op_tablica: Struktura): integer;
 { funkcja bedzie zwracala roznice w wysokosci proriorytetu operatora na stosie i operatora z tablicy }
         const
-                PR_UNARNEGO = 3; { operator unarny ma najwyzszy prorytet i wyznacza rozmiar tablicy }
+                PR_UNARNEGO = 4; { operator unarny ma najwyzszy prorytet i wyznacza rozmiar tablicy }
         var
                 priorytety: array[1..PR_UNARNEGO] of string;
 
@@ -29,7 +29,8 @@ function porownaj_operatory(op_stos: Struktura; op_tablica: Struktura): integer;
                 ROBIE TO RECZNIE *}
         priorytety[1]:='+-';
         priorytety[2]:='*/';
-        priorytety[3]:='unarny'; { w sumie tylko dla zasady, bo unarnosc sprawdza sie poprzez odwolanie
+        priorytety[3]:='^';
+        priorytety[4]:='unarny'; { w sumie tylko dla zasady, bo unarnosc sprawdza sie poprzez odwolanie
                                    do wlasciwego pola w strukturze }
 
 

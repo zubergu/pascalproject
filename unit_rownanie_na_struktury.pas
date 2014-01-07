@@ -23,10 +23,10 @@ const
 
     cyfry = '0123456789';         { zestaw wszystkich cyfr }
     litery = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; { zestaw wszystkich liter }
-    operatory = '+-/*';             { zestaw wszystkich operatorow }
+    operatory = '+-/*^';             { zestaw wszystkich operatorow }
     nawiasy = '()';                 { zestaw wszystkich rozpoznawanych nawiasow }
 
-    liczba_funkcji = 4;             { liczba funkcji rozpoznawanych przez program }
+    liczba_funkcji = 17;             { liczba funkcji rozpoznawanych przez program }
 
 
 type
@@ -75,6 +75,20 @@ function typ_elementu(tymczasowy:string):Typy;
     funkcje[2] := 'cos';
     funkcje[3] := 'tg';
     funkcje[4] := 'ctg';
+    funkcje[5] := 'log2';
+    funkcje[6] := 'log10';
+    funkcje[7] := 'arccos';
+    funkcje[8] := 'arccosh';
+    funkcje[9] := 'arcosh';
+    funkcje[10]:= 'arcsin';
+    funkcje[11]:= 'arcsinh';
+    funkcje[12]:= 'arctanh';
+    funkcje[13]:= 'arsinh';
+    funkcje[14]:= 'artanh';
+    funkcje[15]:= 'cosh';
+    funkcje[16]:= 'sinh';
+    funkcje[17]:= 'tanh';
+    
     {
       co za kawal brzydkiego kodu...
     }
@@ -226,6 +240,7 @@ function rozbij_na_str(r_wej:string; var wynik: tablica; var licznik_str:integer
 
         else    {* jesli nie wczytano litery, cyfry, nawiasu, operatora ani spacji to prerwij i zwroc blad *}
             begin
+            writeln('Unit rownanie_na_struktury:');
             writeln('Nierozpoznawalne znaki w rownaniu!');
             rozbij_na_str:=False;
             stan:=False;
